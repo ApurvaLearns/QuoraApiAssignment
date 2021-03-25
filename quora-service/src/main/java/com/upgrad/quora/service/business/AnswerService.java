@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 
 @Service
 public class AnswerService {
@@ -37,20 +38,18 @@ public class AnswerService {
             ZonedDateTime logouttime = userAuthTokenEntity.getLogoutAt();
             if (logouttime != null)
                 throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post an answer");
-            else
-            {
+            else {
                 QuestionEntity questionEntity = questionDao.getQuestion(questionId);
-                if(questionEntity == null)
-                    throw new InvalidQuestionException("QUES-001","The question entered is invalid");
-                else
-                {
+                if (questionEntity == null)
+                    throw new InvalidQuestionException("QUES-001", "The question entered is invalid");
+                else {
                     answerEntity.setUser(userAuthTokenEntity.getUser());
                     answerEntity.setQuestion(questionEntity);
                     answerEntity.setDate(ZonedDateTime.now());
                     return answerDao.createAnswer(answerEntity);
                 }
             }
-    }
+        }
 
     }
 
@@ -82,4 +81,64 @@ public class AnswerService {
 
         }
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteAnswer(String answerId, String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
+
+        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserByToken(authorization);
+        if (userAuthTokenEntity == null)
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        else {
+            ZonedDateTime logouttime = userAuthTokenEntity.getLogoutAt();
+            if (logouttime != null)
+                throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to Sign in first to delete an answer");
+            else {
+                AnswerEntity answerEntity = answerDao.getAnswer(answerId);
+                if (answerEntity == null)
+                    throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
+                else {
+                    if (!(answerEntity.getUser() == userAuthTokenEntity.getUser())) {
+
+                        String role = userAuthTokenEntity.getUser().getRole();
+                        if (!role.equalsIgnoreCase("admin")) {
+                            throw new AuthorizationFailedException("ATHR-003", "Only the question owner or admin can delete the answer");
+                        } else {
+                            answerDao.deleteAnswer(answerEntity);
+                        }
+
+                    } else
+                        answerDao.deleteAnswer(answerEntity);
+
+                }
+
+            }
+
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ArrayList<AnswerEntity> getAnswers(String questionId, String authorization) throws AuthorizationFailedException, InvalidQuestionException {
+
+        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserByToken(authorization);
+        if (userAuthTokenEntity == null)
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        else {
+            ZonedDateTime logouttime = userAuthTokenEntity.getLogoutAt();
+            if (logouttime != null)
+                throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get the answers");
+            else {
+                QuestionEntity questionEntity = questionDao.getQuestion(questionId);
+                if (questionEntity == null)
+                    throw new InvalidQuestionException("QUES-001", "The question with entered uuid whose details are to be seen does not exist");
+                else {
+
+                      return answerDao.getAllAnswers(questionEntity);
+
+                }
+
+
+            }
+        }
+    }
+
 }
