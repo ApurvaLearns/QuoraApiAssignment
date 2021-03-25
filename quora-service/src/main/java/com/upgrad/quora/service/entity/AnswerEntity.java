@@ -11,15 +11,13 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "question", schema = "public")
+@Table(name = "answer", schema = "public")
 
 @NamedQueries({
-        @NamedQuery(name = "getAllquestions" , query = "select q from QuestionEntity q"),
-        @NamedQuery(name = "getQuestion" , query = "select q from QuestionEntity q where q.uuid = :uuid"),
-        @NamedQuery(name = "getQuestionByUser" , query = "select q from QuestionEntity q where q.user = :user")
+        @NamedQuery(name = "getAnswer" , query = "select a from AnswerEntity a where a.uuid = :uuid")
 })
+public class AnswerEntity implements Serializable {
 
-public class QuestionEntity implements Serializable {
 
     @Id
     @Column(name = "ID")
@@ -30,14 +28,24 @@ public class QuestionEntity implements Serializable {
     @Size(max = 200)
     private String uuid;
 
-    @Column(name = "CONTENT")
+    @Column(name = "ans")
     @NotNull
     @Size(max = 500)
-    private String content;
+    private String ans;
 
     @Column(name = "DATE")
     @NotNull
     private ZonedDateTime date;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "USER_ID")
+    private UserEntity user;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "question_id")
+    private QuestionEntity question;
 
     public Integer getId() {
         return id;
@@ -55,12 +63,12 @@ public class QuestionEntity implements Serializable {
         this.uuid = uuid;
     }
 
-    public String getContent() {
-        return content;
+    public String getAns() {
+        return ans;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setAns(String ans) {
+        this.ans = ans;
     }
 
     public ZonedDateTime getDate() {
@@ -79,8 +87,13 @@ public class QuestionEntity implements Serializable {
         this.user = user;
     }
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "USER_ID")
-    private UserEntity user;
+    public QuestionEntity getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(QuestionEntity question) {
+        this.question = question;
+    }
+
+
 }
