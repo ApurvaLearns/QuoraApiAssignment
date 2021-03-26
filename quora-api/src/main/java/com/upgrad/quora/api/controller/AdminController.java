@@ -17,6 +17,8 @@ public class AdminController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    //The controller method is called when  the Request type is Delete. A user needs to be deleted ,once a valid authorization token is provided
+
     @RequestMapping(method = RequestMethod.DELETE, path = "/admin/user/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDeleteResponse> deleteUserDetails(@PathVariable("userId") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthenticationFailedException, UserNotFoundException {
 

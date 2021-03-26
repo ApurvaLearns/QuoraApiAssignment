@@ -29,6 +29,8 @@ public class AnswerService {
     @Autowired
     private AnswerDao answerDao;
 
+    //Service method which will call the Dao method to Create an answer. It validates access token is
+    //valid and the user has not signed out and Question id is a valid one
     @Transactional(propagation = Propagation.REQUIRED)
     public AnswerEntity createAnswer(String questionId, String authorization, AnswerEntity answerEntity) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserByToken(authorization);
@@ -54,6 +56,8 @@ public class AnswerService {
     }
 
 
+    //Method to edit an answer. Once the access token is valid one and the user id signed in, the answer id
+    //is verified if it is a valid one .Only answer owner can edit an answer
     @Transactional(propagation = Propagation.REQUIRED)
     public AnswerEntity editAnswer(String answerId, String authorization, String content) throws AuthorizationFailedException, AnswerNotFoundException {
 

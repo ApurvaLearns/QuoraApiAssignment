@@ -34,6 +34,7 @@ public class UserController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    //Post Request to signup a user
     @RequestMapping(method= RequestMethod.POST, path="/user/signup", consumes= MediaType.APPLICATION_JSON_UTF8_VALUE, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> signup(final SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
         final UserEntity userEntity = new UserEntity();
@@ -56,6 +57,8 @@ public class UserController {
 
     }
 
+    //Post Request to sign in a user , once a user signup. User name and password needs to be provided in
+    //Base 64 format, which once verified , an access token will be generated which will be required for further operations.
     @RequestMapping(method = RequestMethod.POST, path = "/user/signin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SigninResponse> login(@RequestHeader("authorization") final String authorization) throws AuthenticationFailedException {
         byte[] decode = Base64.getDecoder().decode(authorization.split("Basic ")[1]);
@@ -72,6 +75,7 @@ public class UserController {
         return new ResponseEntity<SigninResponse>(signinResponse,headers, HttpStatus.OK);
     }
 
+     //Post Method for signing out a user. Once signed out , the access token will expire and user has to sin in again to perform operations
     @RequestMapping(method = RequestMethod.POST, path = "/user/signout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignoutResponse> logout(@RequestHeader("authorization") final String authorization) throws SignOutRestrictedException
     {

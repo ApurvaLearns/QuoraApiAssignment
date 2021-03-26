@@ -19,6 +19,7 @@ public class CommonController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    //Get method  for fetching the details of a user based on given userId once the access  token is verified
     @RequestMapping(method = RequestMethod.GET, path = "/userprofile/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDetailsResponse> getUserDetails(@PathVariable("userId") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthenticationFailedException, UserNotFoundException {
         UserEntity user = authenticationService.getUser(userUuid,authorization);

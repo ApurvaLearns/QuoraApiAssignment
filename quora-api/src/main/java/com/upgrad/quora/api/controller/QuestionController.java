@@ -25,6 +25,7 @@ public class QuestionController {
     @Autowired
     QuestionService  questionService;
 
+    //Post Method to create a question , once the access token is verified
     @RequestMapping(method = RequestMethod.POST, path = "/question/create", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionResponse> createQuestion(@RequestHeader("authorization") final String authorization, final QuestionRequest questionRequest) throws AuthorizationFailedException {
         QuestionEntity questionEntity = new QuestionEntity();
@@ -37,6 +38,8 @@ public class QuestionController {
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
     }
 
+
+    //Get Method to get  all question ,once the access token is verified
 
     @RequestMapping(method = RequestMethod.GET, path = "/question/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ArrayList<QuestionDetailsResponse>> getAllQuestions(@RequestHeader("authorization") final String authorization) throws AuthorizationFailedException {
@@ -53,6 +56,7 @@ public class QuestionController {
 
     }
 
+    //Put method to edit a question once the access token is verified. Only the owner of question can edit an answer
     @RequestMapping(method = RequestMethod.PUT, path = "/question/edit/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionEditResponse> editQuestion(@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization, final QuestionEditRequest questionEditRequest) throws AuthorizationFailedException, InvalidQuestionException {
         String content= questionEditRequest.getContent();
@@ -61,6 +65,7 @@ public class QuestionController {
         return new ResponseEntity<QuestionEditResponse>(questionEditResponse, HttpStatus.OK);
     }
 
+    //Delete Request to delete a question , once the access token is verified .Only owner and admin can delete a question
     @RequestMapping(method = RequestMethod.DELETE, path = "/question/delete/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
         questionService.deleteQuestion(questionId,authorization);
@@ -68,7 +73,7 @@ public class QuestionController {
         return new ResponseEntity<QuestionDeleteResponse>(questionDeleteResponse, HttpStatus.OK);
     }
 
-
+   // Get Request to get all questions posted by a user, once access token is verified.
     @RequestMapping(method = RequestMethod.GET, path = "/question/all/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ArrayList<QuestionDetailsResponse>> getAllQuestionsByUser(@PathVariable("userId") final String userId,@RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
         System.out.println(userId);
