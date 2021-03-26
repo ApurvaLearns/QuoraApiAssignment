@@ -9,10 +9,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-
+//Mapped to table question in DB
 @Entity
 @Table(name = "question", schema = "public")
 
+//Different named Queries for fetching the data
 @NamedQueries({
         @NamedQuery(name = "getAllquestions" , query = "select q from QuestionEntity q"),
         @NamedQuery(name = "getQuestion" , query = "select q from QuestionEntity q where q.uuid = :uuid"),
@@ -21,6 +22,8 @@ import java.time.ZonedDateTime;
 
 public class QuestionEntity implements Serializable {
 
+    ///@Id annotation specifies that the corresponding attribute is a primary key
+    //@Column annotation specifies that the attribute will be mapped to the column in the DB
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,6 +82,9 @@ public class QuestionEntity implements Serializable {
         this.user = user;
     }
 
+
+    //The 'Question' table is mapped to 'User' table with Many:One mapping
+    //One Question can belong to  only one user but one user can have multiple  question
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "USER_ID")

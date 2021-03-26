@@ -24,6 +24,8 @@ public class AuthenticationService {
     @Autowired
     private PasswordCryptographyProvider CryptographyProvider;
 
+    //Method to authenticate a user while signing in, An access token will be generated if the user name
+    //and password are correct, which will be required for further operations
     @Transactional(propagation = Propagation.REQUIRED)
     public UserAuthTokenEntity authenticate(final String username, final String password) throws AuthenticationFailedException {
         UserEntity userEntity = userDao.getUserByUserName(username);
@@ -55,6 +57,7 @@ public class AuthenticationService {
         }
     }
 
+    //Method to check if access token provided is  a valid one
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity checkUser(String authorization) throws SignOutRestrictedException {
 
@@ -72,6 +75,7 @@ public class AuthenticationService {
 
     }
 
+    //Method to Get details of user on passing the uuid once the access token is verified
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity getUser(String uuid, String authorization) throws AuthenticationFailedException, UserNotFoundException {
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserByToken(authorization);
@@ -91,7 +95,7 @@ public class AuthenticationService {
         }
     }
 
-
+  // Method to delete a user , once the access token is verified. Only an admin can delete any user
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteUser(String userUuid, String authorization) throws AuthenticationFailedException, UserNotFoundException {
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserByToken(authorization);

@@ -15,6 +15,8 @@ import java.io.Serializable;
 
 public class UserEntity implements Serializable{
 
+    ///@Id annotation specifies that the corresponding attribute is a primary key
+    //@Column annotation specifies that the attribute will be mapped to the column in the DB
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

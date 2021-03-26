@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-
+//Mapped to table user_auth in DB
 @Entity
 @Table(name = "user_auth", schema = "public")
 
@@ -25,6 +25,8 @@ import java.time.ZonedDateTime;
 
 public class UserAuthTokenEntity implements Serializable {
 
+    ///@Id annotation specifies that the corresponding attribute is a primary key
+    //@Column annotation specifies that the attribute will be mapped to the column in the DB
 
     @Id
     @Column(name = "ID")
@@ -35,6 +37,8 @@ public class UserAuthTokenEntity implements Serializable {
     @Size(max = 64)
     private String uuid;
 
+    //The 'user_auth table is mapped to 'User' table with Many:One mapping
+    //One token can belong to  only one user but one user can have multiple tokens
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "USER_ID")

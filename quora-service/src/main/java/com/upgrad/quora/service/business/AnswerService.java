@@ -86,6 +86,8 @@ public class AnswerService {
         }
     }
 
+  //Request to  delete an answer. Once the access token is verified to be of valid one and not expired, only owner or
+    //admin can delete an answer
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteAnswer(String answerId, String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
 
@@ -120,6 +122,7 @@ public class AnswerService {
         }
     }
 
+    //Method to getAnswers once Access Token is verified and user is signed in
     @Transactional(propagation = Propagation.REQUIRED)
     public ArrayList<AnswerEntity> getAnswers(String questionId, String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 

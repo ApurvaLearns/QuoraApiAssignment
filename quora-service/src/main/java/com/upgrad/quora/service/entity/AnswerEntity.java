@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-
+//This entity would be mapped to table answer in DB
 @Entity
 @Table(name = "answer", schema = "public")
 
@@ -19,7 +19,8 @@ import java.time.ZonedDateTime;
 })
 public class AnswerEntity implements Serializable {
 
-
+   ////@Id annotation specifies that the corresponding attribute is a primary key
+    //@Column annotation specifies that the attribute will be mapped to the column in the DB
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +39,16 @@ public class AnswerEntity implements Serializable {
     @NotNull
     private ZonedDateTime date;
 
+
+    //The 'answer' table is mapped to 'users' table with Many:One mapping
+    //One answer can have only one user (owner) but one user can have multiple  answers
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "USER_ID")
     private UserEntity user;
+
+    //The 'answer' table is mapped to 'Question' table with Many:One mapping
+    //One answer can belong to  only one Question but one Question can have multiple  answers
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
