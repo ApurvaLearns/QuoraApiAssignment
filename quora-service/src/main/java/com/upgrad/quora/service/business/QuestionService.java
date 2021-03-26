@@ -142,8 +142,8 @@ public class QuestionService {
     @Transactional(propagation = Propagation.REQUIRED)
     public ArrayList<QuestionEntity> getAllQuestionsByUser(String userid,String authorization) throws AuthorizationFailedException, UserNotFoundException {
 
-        System.out.println(userid);
-        System.out.println(authorization);
+        System.out.println("UserId"+userid);
+        System.out.println("Authorization"+authorization);
 
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserByToken(authorization);
         if (userAuthTokenEntity == null)
@@ -161,7 +161,7 @@ public class QuestionService {
                  else
                 {
 
-                    System.out.println("userId  "+userEntity.getId());
+                  //  System.out.println("userId  "+userEntity.getId());
 
                      return questionDao.getAllQuestionsByUser(userEntity);
                 }

@@ -5,7 +5,7 @@ import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthenticationFailedException;
-import com.upgrad.quora.service.exception.SignUpRestrictedException;
+import com.upgrad.quora.service.exception.SignOutRestrictedException;
 import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,11 +56,11 @@ public class AuthenticationService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserEntity checkUser(String authorization) throws SignUpRestrictedException {
+    public UserEntity checkUser(String authorization) throws SignOutRestrictedException {
 
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserByToken(authorization);
         if (userAuthTokenEntity == null)
-            throw new SignUpRestrictedException("SGR-001", "User is not Signed in");
+            throw new SignOutRestrictedException("SGR-001", "User is not Signed in");
         else {
             //userDao.updateUserToken(userAuthTokenEntity);
             userAuthTokenEntity.setLogoutAt(ZonedDateTime.now());

@@ -69,7 +69,7 @@ public class QuestionController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, path = "/question/all{/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.GET, path = "/question/all/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ArrayList<QuestionDetailsResponse>> getAllQuestionsByUser(@PathVariable("userId") final String userId,@RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
         System.out.println(userId);
         System.out.println(authorization);
