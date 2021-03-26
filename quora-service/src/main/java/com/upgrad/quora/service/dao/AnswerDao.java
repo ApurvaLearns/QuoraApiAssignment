@@ -15,12 +15,15 @@ public class AnswerDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    //To create an answer
     public AnswerEntity createAnswer(AnswerEntity answerEntity) {
 
         entityManager.persist(answerEntity);
         return answerEntity;
     }
 
+
+    //To fetch the details from the DB for an answerid
     public AnswerEntity getAnswer(String answerId) {
 
         try {
@@ -30,15 +33,18 @@ public class AnswerDao {
         }
     }
 
+    //To update an answer
     public AnswerEntity editAnswer(AnswerEntity answerEntity) {
         entityManager.merge(answerEntity);
         return answerEntity;
     }
 
+    //To delete an answer in DB
     public void deleteAnswer(AnswerEntity answerEntity) {
         entityManager.remove(answerEntity);
     }
 
+     //To get an ArrayList of AnswerEntity
     public ArrayList<AnswerEntity> getAllAnswers(QuestionEntity questionEntity) {
 
         return (ArrayList<AnswerEntity>) entityManager.createNamedQuery("getAllAnswers",AnswerEntity.class).setParameter("question",questionEntity).getResultList();

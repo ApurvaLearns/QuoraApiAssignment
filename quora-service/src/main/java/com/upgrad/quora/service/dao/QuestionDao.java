@@ -15,12 +15,14 @@ public class QuestionDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    //To create a quetsion
     public QuestionEntity createQuestion(QuestionEntity questionEntity) {
 
         entityManager.persist(questionEntity);
         return questionEntity;
     }
 
+     //To get all question from DB
     public ArrayList<QuestionEntity> getAllQuestion() {
         try {
             return (ArrayList<QuestionEntity>) entityManager.createNamedQuery("getAllquestions", QuestionEntity.class).getResultList();

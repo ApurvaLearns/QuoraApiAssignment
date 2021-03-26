@@ -26,7 +26,7 @@ public class QuestionService {
     @Autowired
     private QuestionDao questionDao;
 
-
+//Method to create a Question once the access token is validated and access token is signed in
     @Transactional(propagation = Propagation.REQUIRED)
     public QuestionEntity createQuestion(QuestionEntity questionEntity, String authorization) throws AuthorizationFailedException {
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserByToken(authorization);
@@ -45,6 +45,7 @@ public class QuestionService {
 
     }
 
+    //Method to get all Question once the access token is validated and access token is signed in
     @Transactional(propagation = Propagation.REQUIRED)
     public ArrayList<QuestionEntity> getDetails(String authorization) throws AuthorizationFailedException {
 
@@ -62,6 +63,9 @@ public class QuestionService {
         }
     }
 
+
+    //Method to edit a question when an access token is validated and user is signed in . Only question owner
+    //can edit a question
     @Transactional(propagation = Propagation.REQUIRED)
     public QuestionEntity editQuestion(String questionId, String authorization, String content) throws AuthorizationFailedException, InvalidQuestionException {
 
@@ -95,7 +99,7 @@ public class QuestionService {
         }
     }
 
-
+//Method to delete a Quetsion . Only the question owner or admin delete a question
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteQuestion(String questionId, String authorization) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserByToken(authorization);
@@ -138,6 +142,8 @@ public class QuestionService {
             }
     }
 
+
+    //Method to get all Questions posted by a user
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ArrayList<QuestionEntity> getAllQuestionsByUser(String userid,String authorization) throws AuthorizationFailedException, UserNotFoundException {
